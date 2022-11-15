@@ -4,6 +4,7 @@ const { promisify } = require("util")
 const { glob } = require("glob")
 const PG = promisify(glob)
 const Ascii = require("ascii-table")
+
 require("dotenv").config()
 const { Channel, GuildMember, Message, Reaction, ThreadMember, User, GuildScheduledEvent } = Partials
 
@@ -15,13 +16,15 @@ const client = new Client({
 })
 
 client.commands = new Collection()
+client.buttons = new Collection()
+client.subCommands = new Collection()
+client.emojis = require("../emojis.json")
 
-const Handlers = ["Events", "Errors", "Commands"]
+// require('../Systems/Giveaways.js')(client);
 
+const Handlers = ["Events", "Errors", "Commands", "Buttons"]
 Handlers.forEach(handler => {
-
     require(`./Handlers/${handler}`)(client, PG, Ascii)
-
 })
 
 module.exports = client

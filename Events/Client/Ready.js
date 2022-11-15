@@ -1,5 +1,8 @@
 const { Client } = require("discord.js")
 const ms = require("ms")
+const mongoose = require("mongoose")
+const MONGO = process.env.MONGO 
+
 
 module.exports = {
     name: "ready",
@@ -11,7 +14,7 @@ module.exports = {
 
         const { user, ws } = client
 
-        console.log(`${user.tag} is now online!`)
+        console.log(`[NEXON STATUS] 》》 Online`)
 
         setInterval(() => {
 
@@ -23,6 +26,14 @@ module.exports = {
             })
 
         }, ms("5s"))
-
+      
+      if (!MONGO) return
+      mongoose.connect(MONGO, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,    
+      })
+        .then(() => {
+        console.log("[DATABASE] 》》 Connected")
+      }).catch(err => console.log(err))
     }
 }

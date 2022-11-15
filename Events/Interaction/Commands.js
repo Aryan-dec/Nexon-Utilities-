@@ -25,6 +25,21 @@ module.exports = {
 
         if (command.BotPerms && command.BotPerms.length !== 0) if (!guild.members.me.permissions.has(command.BotPerms)) return Reply(interaction, ErrorA, `I need \`${command.BotPerms.join(", ")}\` permission(s) to execute this command!`, true)
 
+       if (interaction.isChatInputCommand()) {
+      if (!command) return interaction.reply({ content: "This command is outdated!", ephemeral: true });
+      if (command.developer && interaction.user.id !== "<your-user-id>")
+        return interaction.reply({
+          content: "This command is only available to the developer.",
+          ephemeral: true,
+        });
+
+      command.execute(interaction, client);
+    }
+
+    if (interaction.type == InteractionType.ApplicationCommandAutocomplete) {
+      command.autocomplete(interaction, client);
+    }
+
         command.execute(interaction, client)
 
     }
